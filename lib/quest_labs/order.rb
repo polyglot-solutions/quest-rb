@@ -3,6 +3,8 @@ class QuestLabs::Order
 
   HL7_VERSION = "2.5.1"
 
+  DOCUMENT_TYPES = ["ABN", "AOE", "REQ"]
+
   # Processing ID should be set to P in production
   def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient")
     @patient = patient
@@ -21,6 +23,19 @@ class QuestLabs::Order
     decoded_response = Base64.strict_decode64(resp)
     @hl7_resp = HL7::Message.new(decoded_response)
     @hl7_resp[:MSA].ack_code == "AA"
+  end
+
+  def get_order_document(document_types = DOCUMENT_TYPES)
+    client = QuestLabs::Client.instance
+    data = {
+      'documentTypes' => document_types,
+      'orderHl7' => b64_encoded_hl7_string
+    }
+    client.call(:post, "hub-resource-server/oauth2/order/document/", data.to_json)
+  end
+
+  def to_s
+    to_hl7_str
   end
 
   private

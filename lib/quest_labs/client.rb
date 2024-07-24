@@ -8,18 +8,17 @@ class QuestLabs::Client
 
   attr_reader :token_expiration_time, :token
 
-  def call(method, path, params={}, parse_json=false)
+  def call(method, path, params={}, json_request=true)
     get_token if token.nil? || token_about_to_expire?
     case method
     when :post
-      response = post_call(path, params)
+      response = post_call(path, params, json_request)
     when :get
       response = get_call(path, params)
     else
       raise "Unsupported Method : #{method}"
     end
-
-    parse_json ? JSON.parse(response.body) : response.body
+    json_request ? JSON.parse(response.body) : response.body
   end
 
   private
@@ -40,13 +39,19 @@ class QuestLabs::Client
     }
   end
 
-  def post_call(path, params)
+  def post_call(path, params, json_request=false)
     uri = URI("#{config.base_url}#{path}")
     req = Net::HTTP::Post.new(uri)
 
     req['Authorization'] = "Bearer #{token}"
-    req["Content-Type"] = "text/plain"
-    req["Accept"] = "text/plain"
+
+    if json_request
+      req["Content-Type"] = "application/json"
+      req["Accept"] = "application/json"
+    else
+      req["Content-Type"] = "text/plain"
+      req["Accept"] = "text/plain"
+    end
 
     req.body = params
 
