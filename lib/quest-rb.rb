@@ -7,6 +7,7 @@ require_relative "quest_labs/insurance"
 require_relative "quest_labs/provider"
 require_relative "quest_labs/diagnosis"
 require_relative "quest_labs/test_code"
+require_relative "quest_labs/result"
 
 module QuestLabs
   autoload :Client, "quest_labs/client"
