@@ -1,12 +1,12 @@
 class QuestLabs::Order
-  attr_accessor :patient, :insurance, :provider, :test_codes, :diagnosis, :message_control_id, :processing_id, :patient_location, :placer_order_number, :hl7_resp
+  attr_accessor :patient, :insurance, :provider, :test_codes, :diagnosis, :message_control_id, :processing_id, :patient_location, :placer_order_number, :hl7_resp, :note, :receiving
 
   HL7_VERSION = "2.5.1"
 
   DOCUMENT_TYPES = ["ABN", "AOE", "REQ"]
 
   # Processing ID should be set to P in production
-  def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient")
+  def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient", note=nil, receiving="PSC")
     @patient = patient
     @insurance = insurance
     @provider = provider
@@ -15,6 +15,8 @@ class QuestLabs::Order
     @placer_order_number = placer_order_number
     @message_control_id = message_control_id
     @processing_id = processing_id
+    @note = note
+    @receiving = receiving
   end
 
   def transmit
@@ -51,6 +53,7 @@ class QuestLabs::Order
   def hl7_msg
     msg = HL7::Message.new()
     msg << msh_segment
+    msg << nte_segment if note != nil
     msg << patient.to_hl7_pid_segment
     msg << pv1_segment
     msg << insurance.to_in1_segment
@@ -70,13 +73,21 @@ class QuestLabs::Order
     msh.sending_app = QuestLabs.app_name
     msh.enc_chars = '^~\&'
     msh.sending_facility = QuestLabs.account_number
-    msh.recv_facility = "SKB"
+    msh.recv_facility = receiving
     msh.time = DateTime.now
     msh.message_type  = "OML^O21"
     msh.message_control_id = message_control_id
     msh.processing_id = processing_id
     msh.version_id = "2.5.1"
     msh
+  end
+
+  def nte_segment
+    nte = HL7::Message::Segment::NTE.new
+    nte.set_id = "1"
+    nte.source = "R"
+    nte.comment = note
+    nte
   end
 
   def pv1_segment

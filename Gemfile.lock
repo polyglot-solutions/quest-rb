@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    quest-rb (0.0.2)
+    quest-rb (0.0.3)
       ruby-hl7
 
 GEM
