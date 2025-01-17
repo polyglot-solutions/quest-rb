@@ -1,15 +1,8 @@
-GIT
-  remote: https://github.com/ruby-hl7/ruby-hl7.git
-  revision: adb303750d7ed62ce6e86daa1f64ce4e48f72147
-  branch: master
-  specs:
-    ruby-hl7 (1.4.0)
-
 PATH
   remote: .
   specs:
-    quest-rb (0.0.5)
-      ruby-hl7
+    quest-rb (0.0.6)
+      ruby-hl7 (~> 1.1, <= 1.3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -33,6 +26,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
+    ruby-hl7 (1.3.1)
 
 PLATFORMS
   ruby
@@ -43,7 +37,7 @@ DEPENDENCIES
   pry
   quest-rb!
   rspec
-  ruby-hl7!
+  ruby-hl7
 
 BUNDLED WITH
    2.5.11
