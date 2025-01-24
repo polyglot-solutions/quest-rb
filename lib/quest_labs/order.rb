@@ -6,7 +6,7 @@ class QuestLabs::Order
   DOCUMENT_TYPES = ["ABN", "AOE", "REQ"]
 
   # Processing ID should be set to P in production
-  def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient", note=nil, receiving="PSC")
+  def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient", note=nil, receiving="SKB")
     @patient = patient
     @insurance = insurance
     @provider = provider
@@ -70,8 +70,8 @@ class QuestLabs::Order
 
   def msh_segment
     msh = HL7::Message::Segment::MSH.new
+    msh.enc_chars = "^~\&"
     msh.sending_app = QuestLabs.app_name
-    msh.enc_chars = '^~\&'
     msh.sending_facility = QuestLabs.account_number
     msh.recv_facility = receiving
     msh.time = DateTime.now
