@@ -70,7 +70,7 @@ class QuestLabs::Order
 
   def msh_segment
     msh = HL7::Message::Segment::MSH.new
-    msh.enc_chars = "^~\&"
+    msh.enc_chars = '^~\&'
     msh.sending_app = QuestLabs.app_name
     msh.sending_facility = QuestLabs.account_number
     msh.recv_facility = receiving
