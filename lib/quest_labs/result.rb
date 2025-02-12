@@ -8,7 +8,7 @@ class QuestLabs::Result
 
     (resp["results"]||[]).each do |result|
       hl7_message = HL7::Message.new(Base64.decode64(result["hl7Message"]["message"]))
-      pdf_content = Base64.decode64(hl7_message[:OBX][-1][5].split("TAT^IM^^Base64^")[-1])
+      pdf_content = hl7_message[:OBX][-1][5].split("^")[-1]
       yield [result, hl7_message, pdf_content]
       message_control_id = hl7_message[:MSH].message_control_id
 
