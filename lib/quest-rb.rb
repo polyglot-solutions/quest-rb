@@ -25,5 +25,6 @@ module QuestLabs
     def_delegators :@config, :base_url, :base_url=
     def_delegators :@config, :app_name, :app_name=
     def_delegators :@config, :account_number, :account_number=
+    def_delegators :@config, :logger, :logger=
   end
 end

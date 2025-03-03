@@ -1,6 +1,7 @@
 require 'net/http'
 require 'json'
 require 'singleton'
+require 'logger'
 
 class QuestLabs::Client
   BUFFER = 5
@@ -9,7 +10,14 @@ class QuestLabs::Client
   attr_reader :token_expiration_time, :token
 
   def call(method, path, params={}, json_request=true)
+    logger.info("QUEST - Client: method: #{method}")
+    logger.info("QUEST - Client: path: #{path}")
+    logger.info("QUEST - Client: params: #{params}")
+    logger.info("QUEST - Client: json_request: #{json_request}")
+
     get_token if token.nil? || token_about_to_expire?
+    # logger.info("QUEST - Client: token: #{token}")
+
     case method
     when :post
       response = post_call(path, params, json_request)
@@ -18,10 +26,16 @@ class QuestLabs::Client
     else
       raise "Unsupported Method : #{method}"
     end
+    logger.info("QUEST - Client: response: #{response.body}")
+
     json_request ? JSON.parse(response.body) : response.body
   end
 
   private
+
+  def logger
+    @logger ||= (config.logger ||  Logger.new(STDOUT))
+  end
 
   def config
     QuestLabs.config

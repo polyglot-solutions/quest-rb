@@ -23,15 +23,8 @@ class QuestLabs::Result
 
     if ack
       data = {resultServiceType: "HL7", requestId: resp["requestId"], ackMessages: ack_messages}
-      ack_resp = ack_result!(data)
+      QuestLabs::Client.instance.call(:post, "hub-resource-server/oauth2/result/acknowledgeResults", data.to_json, true)
     end
-
-    ack_resp
-  end
-
-  # data = {resultServiceType: result_service_type, requestId: request_id}
-  def self.ack_result!(data)
-    QuestLabs::Client.instance.call(:post, "hub-resource-server/oauth2/result/acknowledgeResults", data.to_json, true)
   end
 
   private
