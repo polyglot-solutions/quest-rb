@@ -74,6 +74,7 @@ class QuestLabs::Order
     msh.sending_app = QuestLabs.app_name
     msh.sending_facility = QuestLabs.account_number
     msh.recv_facility = receiving
+    msh.recv_app = "PSC"
     msh.time = DateTime.now
     msh.message_type  = "OML^O21"
     msh.message_control_id = message_control_id
