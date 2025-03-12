@@ -55,9 +55,10 @@ class QuestLabs::Order
     msg << msh_segment
     msg << nte_segment if note != nil
     msg << patient.to_hl7_pid_segment
-    msg << pv1_segment
-    msg << insurance.to_in1_segment
-    msg << insurance.to_gt1_segment
+    unless insurance.nil?
+      msg << insurance.to_in1_segment
+      msg << insurance.to_gt1_segment
+    end
     msg << common_order_segment
     test_codes.each_with_index do |tc, ix|
       msg << obr_segment(tc, ix)
@@ -89,13 +90,6 @@ class QuestLabs::Order
     nte.source = "R"
     nte.comment = note
     nte
-  end
-
-  def pv1_segment
-    pv1 = HL7::Message::Segment::PV1.new
-    pv1.set_id = "1"
-    pv1.assigned_location = patient_location
-    pv1
   end
 
   def common_order_segment

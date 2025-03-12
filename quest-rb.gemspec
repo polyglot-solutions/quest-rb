@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "quest-rb"
-  s.version     = "0.2.2"
+  s.version     = "0.2.3"
   s.summary     = "Quest Labs API Client"
   s.description = "Quest Labs API Client"
   s.authors     = ["Saul Moncada"]
