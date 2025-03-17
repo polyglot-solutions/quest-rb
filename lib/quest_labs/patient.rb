@@ -17,7 +17,7 @@ class QuestLabs::Patient
     pid.set_id =  "1" #This is always  1
     pid.patient_id = patient_id
     pid.patient_id_list = patient_id
-    pid.patient_name = "#{first_name}^#{last_name}"
+    pid.patient_name = "#{last_name}^#{first_name}"
 
     pid.patient_dob = dob
     pid.admin_sex = sex
