@@ -2,13 +2,14 @@ class QuestLabs::Patient
   attr_accessor :patient_id, :first_name, :last_name, :dob, :address, :phone, :sex
 
   # Address and phone are required if insurance P or T
-  def initialize(patient_id, first_name, last_name, dob, address, phone)
+  def initialize(patient_id, first_name, last_name, dob, address, phone, sex)
     @patient_id = patient_id
     @first_name = first_name
     @last_name = last_name
     @dob = dob
     @address = address
     @phone = phone
+    @sex = sex
   end
 
   def to_hl7_pid_segment
