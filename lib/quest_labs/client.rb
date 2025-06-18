@@ -44,12 +44,12 @@ class QuestLabs::Client
 
   def get_call(path, params)
     uri = URI("#{config.base_url}#{path}?#{URI.encode_www_form(params)}")
-    puts uri
+
     req = Net::HTTP::Get.new(uri)
 
     req['Authorization'] = "Bearer #{token}"
 
-    Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) {|http|
+    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true, read_timeout: 60) {|http|
       http.request(req)
     }
   end
@@ -70,7 +70,7 @@ class QuestLabs::Client
 
     req.body = params
 
-    resp = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => true) {|http|
+    resp = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true, read_timeout: 60) {|http|
       http.request(req)
     }
 
