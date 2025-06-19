@@ -6,7 +6,7 @@ class QuestLabs::Order
   DOCUMENT_TYPES = ["ABN", "AOE", "REQ"]
 
   # Processing ID should be set to P in production
-  def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient", note=nil, receiving="SKB")
+  def initialize(patient, insurance, provider, test_codes, diagnosis, message_control_id, placer_order_number, processing_id="D", patient_location="outpatient", note=nil, receiving="TMP")
     @patient = patient
     @insurance = insurance
     @provider = provider
@@ -55,9 +55,11 @@ class QuestLabs::Order
     msg << msh_segment
     msg << nte_segment if note != nil
     msg << patient.to_hl7_pid_segment
-    unless insurance.nil?
+    if insurance != nil
       msg << insurance.to_in1_segment
       msg << insurance.to_gt1_segment
+    else
+      msg << client_bill_in1_segment
     end
     msg << common_order_segment
     test_codes.each_with_index do |tc, ix|
@@ -68,6 +70,13 @@ class QuestLabs::Order
   end
 
   private
+
+  def client_bill_in1_segment
+    in1 = HL7::Message::Segment::IN1.new
+    in1.set_id = 1
+    in1.coverage_type = "C"
+    in1
+  end
 
   def msh_segment
     msh = HL7::Message::Segment::MSH.new
