@@ -8,6 +8,6 @@ class QuestLabs::Provider
   end
 
   def to_ordering_provider_s
-    "#{npi}^#{first_name.upcase}^#{last_name.upcase}^^^^^^NPI"
+    "#{npi}^#{last_name.upcase}^#{first_name.upcase}^^^^^^NPI"
   end
 end
