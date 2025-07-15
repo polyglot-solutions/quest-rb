@@ -115,7 +115,7 @@ class QuestLabs::Order
     obr.set_id =  (ix + 1).to_s
     obr.placer_order_number = placer_order_number
     obr.universal_service_id = tc.to_universal_service_id
-    obr.observation_date = DateTime.now + 1
+    obr.observation_date = DateTime.now
     obr.ordering_provider = provider.to_ordering_provider_s
     obr
   end
